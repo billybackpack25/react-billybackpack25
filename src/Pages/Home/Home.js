@@ -1,11 +1,15 @@
 import React from 'react'
-import { Hero } from '../../components'
+import { Hero, NavBar } from '../../components'
 
 import { useAuth } from '../../Context/AuthContext'; 
 
 export default function Home() {
     const { user } = useAuth();
     return (
+        <>
+        
+        <NavBar/>
+        
         <Hero
             title="Welcome to BillyBackPack 25"
             subTitle=
@@ -14,9 +18,10 @@ export default function Home() {
                 ? `Welcome Back, ${user}!`
                 : "Feel Free to Poke Around!"
             }
-            imageSrc="https://source.unsplash.com/random/1600x500"
             actionText="Getting started"
             actionUrl="/"
+            snow={true}
         />
+        </>
     )
 }

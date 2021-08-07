@@ -9,15 +9,21 @@ const authContext = createContext();
 const userApi = {
   'bilal':{
     user: 'Bilal Hasson',
-    AvatarImage: bilalAvatar
+    displayName: 'Bilal Hasson 🙂',
+    AvatarImage: bilalAvatar,
+    poems: 13, // Count of poems added
+    visits: 3, // Count of site visits
+    permissions: ['genevieve']
   },
   'gigi': {
     user: 'Genevieve Hasson',
-    AvatarImage: gigiAvatar
+    AvatarImage: gigiAvatar,
+    permissions: ['genevieve']
   },
   'n' : {
     user: undefined,
-    AvatarImage: undefined
+    AvatarImage: undefined,
+    permissions: []
   }
 }
 
@@ -37,18 +43,27 @@ export function useAuth() {
 }
 
 function useProvideAuth() {
+    // userApi['bilal']
+    // userApi['gigi']
     const [user, setUser] = useState(userApi['bilal']);
   
     const signin = cb => {
       return fakeAuth.signin(() => {
-        setUser("user");
+        setUser(userApi['bilal']);
         cb();
       });
     };
   
     const signout = cb => {
       return fakeAuth.signout(() => {
-        setUser(null);
+        setUser(userApi['n']);
+        cb();
+      });
+    };
+
+    const signup = cb => {
+      return fakeAuth.signout(() => {
+        setUser(userApi['bilal']);
         cb();
       });
     };
@@ -56,7 +71,8 @@ function useProvideAuth() {
     return {
       ...user,
       signin,
-      signout
+      signout,
+      signup
     };
 }
 
@@ -68,6 +84,10 @@ const fakeAuth = {
     },
     signout(cb) {
       fakeAuth.isAuthenticated = false;
+      setTimeout(cb, 100);
+    },
+    signup(cb) {
+      fakeAuth.isAuthenticated = true;
       setTimeout(cb, 100);
     }
 };

@@ -1,17 +1,7 @@
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-//import HouseRoundedIcon from '@material-ui/icons/HouseRounded';
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 import Typography from "@material-ui/core/Typography";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -21,93 +11,133 @@ import { useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import useStyles from './styles';
 import ReactTypingEffect from 'react-typing-effect';
+import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
 
 import { useAuth } from "../../Context/AuthContext";
+import { useSite } from "../../Context/SiteContext";
 import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer/SwipeableTemporaryDrawer";
 
-const Items = () => {
-    const { user, AvatarImage } = useAuth()
-    const classes = useStyles();
-    return (
-        <>
-        <List subheader={<ListSubheader>{user}</ListSubheader>}>
-            <ListItem button>
-                <ListItemIcon className={classes.navAvatarItem}>
-                    {/* <HouseRoundedIcon color='primary' /> */}
-                    <Avatar variant='circular' alt={user} src={AvatarImage} className={classes.navAvatar}/>
-                </ListItemIcon>
-                
-                {/* <ListItemText primary='Home' /> */}
-            </ListItem>
+import SideNavOptions from './SideNavOptions/SideNavOptions'
 
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-                </ListItem>
-            ))}
-        </List>
-        <Divider />
-        <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-                </ListItem>
-            ))}
-        </List>
-        </>
-    )
+
+const topNavOptions = [
+    {
+        component:Link,
+        to:`${process.env.PUBLIC_URL}/`,
+        label:'Home'
+    },
+    {
+        component:Link,
+        to:`${process.env.PUBLIC_URL}/genevieve`,
+        label:'Genevieve',
+        // Permission to see the button in the side nav
+        permissions_needed: 'genevieve' 
+    }
+]
+
+
+const userGetsThePage = (link, permissions) => {
+    // If no permissions are needed, return the link
+    if (link.permissions_needed === undefined){
+        return true;
+    } else {
+        // If permissions are needed
+        // Does the users pemission match that of the one's needed?
+        if (permissions.includes(link.permissions_needed)) {
+            return true;
+        }
+    }
+    return false;
 }
 
-const Header = () => {
-    const { user, AvatarImage } = useAuth()
-    const classes = useStyles();
 
+const Header = () => {
+    const { user, AvatarImage, permissions, signout } = useAuth();
+    const classes = useStyles();
     const [fade, setFade] = useState(false);
 
     useEffect(() => {
         setFade(true);
-    }, [])
+    }, []);
 
+    let history = useHistory();
+    let location = useLocation(); 
+    const handleSignOut = (e) => {
+        e.preventDefault();
+        let { from } = location.state || { from: { pathname: "/" } };
+        signout(() => {
+            history.replace(from);
+        });
+    }
+
+    const site = useSite();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     return(
     <AppBar color='transparent' position='fixed' className={classes.appBar}>
         <Toolbar>
-            <Fade in={fade} timeout={1000}>
+            <Fade in={fade} timeout={1500}>
+                <>
+                <Avatar variant='circular' alt='favicon' src={site.favicon} className={classes.favicon}/>
                 <Link to='/'>
                 <Typography
                     component={ReactTypingEffect}
-                    text={'BillyBackPack25'}
+                    text={site.name}
                     typingDelay={1000}
                     variant='overline'
                     className={classes.logoText}
                 />
                 </Link>
+                </>
             </Fade>
             <div style={{flex:1}} />
             {
                 isMobile ? (
-                    user 
-                    ? (
-                        // If user defined, fill with user info
-                        <SwipeableTemporaryDrawer>
-                            <Avatar variant='circular' alt={user} src={AvatarImage} className={classes.avatar}/>
-                            <Items />
-                        </SwipeableTemporaryDrawer>
-                    ) : (
-                        // If the user is not defined, use the scroll default
-                        <SwipeableTemporaryDrawer/>
-                    )
-
-                    
+                    // If user defined, fill with user info
+                    <Fade in={fade} timeout={1500}>
+                        <div style={{display: 'flex'}}>
+                            <SwipeableTemporaryDrawer position='right'>
+                                {
+                                    user 
+                                    ? <Avatar variant='circular' alt={user} src={AvatarImage} className={classes.mainNavAvatar}/>
+                                    : <MenuOutlinedIcon style={{color: 'white'}}/>
+                                }
+                                <SideNavOptions/>
+                            </SwipeableTemporaryDrawer>
+                        </div>
+                    </Fade>
                 ) : (
                 <>
                 <Fade in={fade} timeout={1500}>
                     <div style={{display: 'flex'}}>
-                    <Button className={classes.logoText} component={Link} to={process.env.PUBLIC_URL + "/"}>Home</Button>
-                    <Button className={classes.logoText} component={Link} to={process.env.PUBLIC_URL + "/genevieve"}>Genevieve</Button>
+                        {
+                            topNavOptions.map(link => {
+                                if(userGetsThePage(link, permissions)) {
+                                    return <Button 
+                                                key={`header_${link.label}`} 
+                                                className={classes.logoText} 
+                                                component={link.component} 
+                                                to={link.to}
+                                            >
+                                                {link.label}
+                                            </Button>;
+                                }
+                                return null;
+                            })
+                        }
+                    
+                        {
+                            user
+                            ? <Button className={classes.logoText} onClick={(e) => handleSignOut(e)}>Sign Out</Button>
+                            : <Button className={classes.logoText} component={Link} to='/login'>Login</Button>
+                        }
+                        
+                        {
+                            user 
+                            ?   <Avatar variant='circular' alt={user} src={AvatarImage} className={classes.mainNavAvatar}/>
+                            :   null
+                        }
+                
                     </div>
                 </Fade>
                 </>

@@ -1,27 +1,6 @@
 import { useAuth } from "../../Context/AuthContext";
-import { useLocation, useHistory, Link as RouteLink, Redirect } from "react-router-dom";
+import { Link as RouteLink, Redirect } from "react-router-dom";
 
-// export default function LoginPage() {
-//     let history = useHistory();
-//     let location = useLocation();
-//     let auth = useAuth();
-  
-//     let { from } = location.state || { from: { pathname: "/" } };
-//     let login = () => {
-//       auth.signin(() => {
-//         history.replace(from);
-//       });
-//     };
-  
-//     return (
-//       <div style={{marginTop: 20}}>
-//         <p>You must log in to view the page at {from.pathname}</p>
-//         <button onClick={login}>Log in</button>
-//       </div>
-//     );
-// } 
-
-import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -85,13 +64,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginPage() {
+export default function SignUp({history, location}) {
   const classes = useStyles();
   const site = useSite();
-  let history = useHistory();
-  let location = useLocation();
   let auth = useAuth();
-  
+  let { from } = location.state || { from: { pathname: "/" } };
+
   if(auth.user) return (
     <Redirect
       to={{
@@ -101,12 +79,11 @@ export default function LoginPage() {
     />
   )
 
-  let { from } = location.state || { from: { pathname: "/" } };
-  let login = (e) => {
-    e.preventDefault();
-    auth.signin(() => {
-      history.replace(from);
-    });
+  let signup = (e) => {
+      e.preventDefault();
+      auth.signup(() => {
+        history.replace(from);
+      });
   };
 
   return (
@@ -119,9 +96,34 @@ export default function LoginPage() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
-          <form className={classes.form} noValidate onSubmit={(e) => login(e)}>
+          <form className={classes.form} noValidate onSubmit={(e) => signup(e)}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
+              />
+            </Grid>
+            </Grid>
             <TextField
               variant="outlined"
               margin="normal"
@@ -145,9 +147,9 @@ export default function LoginPage() {
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="I want to receive inspiration, marketing promotions and updates via email."
+              />
             <Button
               type="submit"
               fullWidth
@@ -157,18 +159,13 @@ export default function LoginPage() {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link component={RouteLink} to='/signup' variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+            <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link component={RouteLink} to='/login' variant="body2">
+                Already have an account? Sign in
+              </Link>
             </Grid>
+          </Grid>
             <Box mt={5}>
               <Copyright name={site.name}/>
             </Box>

@@ -6,23 +6,41 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { LoginPage, HomePage, AboutPage, UserPage, BlockingFormPage, NoMatchPage, Genevieve } from "./Pages";
+import { LoginPage, 
+  HomePage, 
+  // AboutPage, 
+  // UserPage, 
+  // BlockingFormPage, 
+  NoMatchPage, 
+  Genevieve, 
+  Profile,
+  AccessDenied, 
+  SignUp
+} from "./Pages";
 
-import { NavBar } from './components';
 import { useAuth } from '../src/Context/AuthContext';
+
 
 export default function RouterApp() {
   return (
         <Router>
-            <NavBar />
             <Switch>
                 {/* Protected Pages */}
-                <PrivateRoute path="/about" component={AboutPage} exact/>
+                <PrivateRoute path="/profile" component={Profile} exact/>
+                {/* <PrivateRoute path="/about" component={AboutPage} exact/>
                 <PrivateRoute path="/users" component={UserPage} exact/>
-                <PrivateRoute path="/form" component={BlockingFormPage} exact/>
+                <PrivateRoute path="/form" component={BlockingFormPage} exact/> */}
+                <PrivateRoute 
+                  path="/genevieve" 
+                  component={Genevieve} 
+                  permission_name='Genevieve' 
+                  permissions_needed='genevieve' 
+                  exact
+                />
                 {/* Non-Protected Pages */}
+                <Route path="/access-denied" component={AccessDenied} exact/>
                 <Route path="/login" component={LoginPage} exact/>
-                <Route path="/genevieve" component={Genevieve} exact/>
+                <Route path="/signup" component={SignUp} exact/>
                 <Route path="/" component={HomePage} exact/>
                 <Route path="*" component={NoMatchPage} exact/>
             </Switch>
@@ -44,6 +62,18 @@ function PrivateRoute(route) {
         }}
       />
     )
+    
+    if (route.permissions_needed && !auth.permissions.includes(route.permissions_needed)) {
+      return (
+      <Redirect
+        to={{
+          pathname: "/access-denied",
+          state: { from: location },
+          search: `?reason=does not have permission&permission_needed=${route.permissions_needed}&page=${route.permission_name}`,
+        }}
+      />
+      )
+    }
 
     return (
       <Route {...route} />

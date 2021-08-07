@@ -17,6 +17,10 @@ import Avatar from '@material-ui/core/Avatar';
 const useStyles = makeStyles({
   list: {
     width: 250,
+    //backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3))',
+    backgroundColor: 'rgb(211,211,211)',
+    opacity: 0.8,
+    height: '100%'
   },
 });
 
@@ -34,7 +38,10 @@ export default function SwipeableTemporaryDrawer({position, children}) {
     });
 
     const toggleDrawer = (anchor, open) => (event) => {
-    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {return;}
+    if (event 
+            && event.type === 'keydown' 
+            && (event.key === 'Tab' || event.key === 'Shift')
+        ) {return;}
     setState({ ...state, [anchor]: open });
     };
 
@@ -59,7 +66,9 @@ export default function SwipeableTemporaryDrawer({position, children}) {
             <Fragment key={anchor}>
                 <IconButton onClick={toggleDrawer(anchor, true)}>{children[0]}</IconButton>
                 <SwipeableDrawer
+                    transitionDuration={{enter:1000,exit:1500}}
                     disableBackdropTransition={!iOS} 
+                    disableSwipeToOpen={iOS}
                     disableDiscovery={iOS}
                     anchor={anchor}
                     open={state[anchor]}
@@ -76,7 +85,7 @@ export default function SwipeableTemporaryDrawer({position, children}) {
 
 SwipeableTemporaryDrawer.defaultProps = {
     position: 'right',
-    children: [<Avatar variant='circular' alt='user'>R</Avatar>,
+    children: [<Avatar variant='circular' alt='user'/>,
     <>
         <List>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (

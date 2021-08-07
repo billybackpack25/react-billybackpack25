@@ -1,13 +1,25 @@
-import { useLocation } from "react-router-dom";
+import React from 'react'
+import { Hero, NavBar } from '../../components'
 
-export default function NoMatch() {
-    let location = useLocation();
-  
+import { useAuth } from '../../Context/AuthContext'; 
+
+export default function NoMatch(props) {
+    const { user } = useAuth();
+
     return (
-      <div>
-        <h3>
-          No match for <code>{location.pathname}</code>
-        </h3>
-      </div>
-    );
+        <>
+        <NavBar/>
+        <Hero
+            title={`Sorry - ${props.location.pathname} doesn't exist`}
+            subTitle=
+            { 
+                user 
+                ? `Hey, ${user}! Why not try going Home?`
+                : "Sorry dude, computer say's no."
+            }
+            actionText="Return Home"
+            actionUrl={props.history.goBack()}
+        />
+        </>
+    )
 }

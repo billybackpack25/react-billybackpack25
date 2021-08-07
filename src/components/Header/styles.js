@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
+    // Main Nav
     appBar: {
         //boxShadow: 'none',
         borderBottom: '1px solid rgba(0, 0, 0, 0.07)',
@@ -26,21 +27,15 @@ export default makeStyles((theme) => ({
       marginLeft: theme.spacing(2),
       fontWeight: 'normal'
     },
-    avatar : {
+    mainNavAvatar : {
       marginLeft: theme.spacing(2),
       opacity: 0.8,
       height: theme.spacing(4),
       width: theme.spacing(4),
     },
-    navAvatar : {
-      
-      //marginLeft: theme.spacing(10),
-      height: theme.spacing(10),
-      width: theme.spacing(10),
-    },
-    navAvatarItem : {
-      justifyContent: 'center',
-      flex: 1
+    favicon : {
+      width: theme.spacing(4),
+      height: theme.spacing(4)
     },
 })
 )

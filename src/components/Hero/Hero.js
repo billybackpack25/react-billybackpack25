@@ -5,12 +5,20 @@ import { Link } from 'react-router-dom';
 
 import useStyles from './styles';
 
-const Hero = ({ title, subTitle, actionText, actionUrl }) => {
+import Snow from '../Snow/Snow';
+
+const Hero = ({ title, subTitle, actionText, actionUrl, snow }) => {
   const classes = useStyles();
+
+  const ShowSnow = () => {
+    if (snow) return <Snow/>
+    return null;
+  }
 
   return (
     <div className={classes.hero}>
       <div className={classes.content}>
+      <ShowSnow/>
         <div className={classes.text}>
           <Typography
             variant="subtitle2"
@@ -60,4 +68,11 @@ const Hero = ({ title, subTitle, actionText, actionUrl }) => {
  *  />
  * </div>
  */
+Hero.defaultProps = {
+  title:'', 
+  subTitle:'', 
+  actionText:'', 
+  actionUrl:'', 
+  snow:false
+}
 export default Hero;
