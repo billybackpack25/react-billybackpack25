@@ -3,7 +3,9 @@ import { makeStyles } from "@material-ui/core";
 export default makeStyles((theme) => ({
     // Main Nav
     appBar: {
-        //boxShadow: 'none',
+        //maxWidth: '1920px',
+        //top:0,
+        //left:0,
         borderBottom: '1px solid rgba(0, 0, 0, 0.07)',
         //|   xs   |   sm   |   md   |   lg   |   xl
         [theme.breakpoints.up('xs')]: {

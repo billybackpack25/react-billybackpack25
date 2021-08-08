@@ -1,6 +1,5 @@
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import { useEffect, useState } from "react";
 import { Link, useLocation, useHistory } from "react-router-dom";
 
 import Typography from "@material-ui/core/Typography";
@@ -18,6 +17,7 @@ import { useSite } from "../../Context/SiteContext";
 import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer/SwipeableTemporaryDrawer";
 
 import SideNavOptions from './SideNavOptions/SideNavOptions'
+import { useEffect, useState } from "react";
 
 
 const topNavOptions = [
@@ -54,11 +54,39 @@ const userGetsThePage = (link, permissions) => {
 const Header = () => {
     const { user, AvatarImage, permissions, signout } = useAuth();
     const classes = useStyles();
-    const [fade, setFade] = useState(false);
+
+    // Set scroll nav colour - START
+    const [scrollStyle, setScrollStyle] = useState({});
 
     useEffect(() => {
-        setFade(true);
-    }, []);
+        window.addEventListener('scroll', listen);
+        
+        return () => {
+            window.removeEventListener('scroll', listen)
+        }
+    }, [])
+
+    const listen = () => {
+        if (window.scrollY > 400) {
+            setScrollStyle({
+                transition: 'background-color 2s ease-in-out',
+                backgroundColor: 'rgba(95,52,27,1)',
+            });
+        } else {
+            setScrollStyle({
+                transition: 'background-color 2s ease-in-out',
+                backgroundColor: 'transparent',
+            })
+        }
+    }
+    // Set scroll nav colour - END
+
+
+
+
+
+    // If there needs to be a condition for nav items to fade
+    const fade = true;
 
     let history = useHistory();
     let location = useLocation(); 
@@ -74,7 +102,7 @@ const Header = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     return(
-    <AppBar color='transparent' position='fixed' className={classes.appBar}>
+    <AppBar color='transparent' style={scrollStyle} position='fixed' className={classes.appBar}>
         <Toolbar>
             <Fade in={fade} timeout={1500}>
                 <>
