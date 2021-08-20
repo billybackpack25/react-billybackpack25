@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
 import { Hero, NavBar } from '../../components';
 
@@ -10,9 +10,9 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function AccessDenied() {
+export default function AccessDenied({history}) {
     let query = useQuery();
-    const { user } = useAuth();
+    const { user, permissions } = useAuth();
     
     const reason = query.get('reason');
     const perm_needed = query.get('permission_needed');
@@ -21,6 +21,14 @@ export default function AccessDenied() {
     const reasons = {
         'does not have permission': `Sorry, ${user} You do not have permission to access ${page}`
     }
+
+    // Redirect if they now have permission
+    
+    useEffect(() => {
+        if (permissions.includes(perm_needed)){
+            history.push(page)
+        }
+    }, [permissions, perm_needed, history, page])
 
     return (
         <>

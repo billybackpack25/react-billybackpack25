@@ -8,3 +8,4 @@ export { default as NoMatchPage } from './NoMatch/NoMatch';
 export { default as Genevieve } from './Genevieve/Genevieve';
 export { default as Profile } from './Profile/Profile';
 export { default as  AccessDenied } from "./AccessDenied/AccessDenied";
+export { default as  Gallery } from "./Genevieve/Gallery/Gallery";

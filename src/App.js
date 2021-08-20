@@ -4,6 +4,7 @@ import ProvideSite from './Context/SiteContext';
 import RouterApp from './Routing';
 
 import { makeStyles } from '@material-ui/core/styles';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     justifyContent: 'center',
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+
   return (
     <>
       <CssBaseline/>

@@ -7,10 +7,7 @@ import {
 } from "react-router-dom";
 
 import { LoginPage, 
-  HomePage, 
-  // AboutPage, 
-  // UserPage, 
-  // BlockingFormPage, 
+  HomePage,
   NoMatchPage, 
   Genevieve, 
   Profile,
@@ -18,7 +15,9 @@ import { LoginPage,
   SignUp
 } from "./Pages";
 
-import { useAuth } from '../src/Context/AuthContext';
+import GenevieveRoutings from './Pages/Genevieve/Routings'; 
+
+import { useAuth } from './Context/AuthContext';
 
 
 export default function RouterApp() {
@@ -27,17 +26,12 @@ export default function RouterApp() {
             <Switch>
                 {/* Protected Pages */}
                 <PrivateRoute path="/profile" component={Profile} exact/>
-                {/* <PrivateRoute path="/about" component={AboutPage} exact/>
-                <PrivateRoute path="/users" component={UserPage} exact/>
-                <PrivateRoute path="/form" component={BlockingFormPage} exact/> */}
                 <PrivateRoute 
-                  path="/genevieve" 
-                  component={Genevieve} 
-                  permission_name='Genevieve' 
-                  permissions_needed='genevieve' 
-                  exact
+                  path="/genevieve" component={Genevieve} exact
+                  permission_name='/genevieve' permissions_needed='genevieve' 
                 />
                 {/* Non-Protected Pages */}
+                <GenevieveRoutings path={'/genevieve'}/>
                 <Route path="/access-denied" component={AccessDenied} exact/>
                 <Route path="/login" component={LoginPage} exact/>
                 <Route path="/signup" component={SignUp} exact/>
@@ -50,7 +44,7 @@ export default function RouterApp() {
 
 /* Redirects Router - START */
 
-function PrivateRoute(route) {
+export function PrivateRoute(route) {
     let auth = useAuth();
     let location = useLocation();
 

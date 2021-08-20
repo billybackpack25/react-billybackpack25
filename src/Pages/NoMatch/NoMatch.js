@@ -5,6 +5,7 @@ import { useAuth } from '../../Context/AuthContext';
 
 export default function NoMatch(props) {
     const { user } = useAuth();
+    console.log()
 
     return (
         <>
@@ -18,7 +19,7 @@ export default function NoMatch(props) {
                 : "Sorry dude, computer say's no."
             }
             actionText="Return Home"
-            actionUrl={props.history.goBack()}
+            actionUrl='/'
         />
         </>
     )

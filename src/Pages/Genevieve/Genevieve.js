@@ -62,43 +62,39 @@ const cards = [
     {
         icon: <AccountCircleOutlinedIcon/>,
         heading: 'Insta IM\'s',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-        buttonOne: 'Button One',
-        buttonTwo: 'Button Two'
+        body: 'Take a look 👀 at our past converstion 💬 on Instagram, relive the highlights, and remember your love journey 💕 ',
+        link: 'instagram',
     },
     {
         icon: <BrushOutlinedIcon/>,
         heading: 'Gallery',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-        buttonOne: 'Button One',
-        buttonTwo: 'Button Two'
+        body: "Don't want to scroll 📜 through the conversation to find photo's 📷, I don't blame you. All our photo's in one place 😇",
+        link: 'gallery',
     },
     {
         icon: <EcoOutlinedIcon/>,
         heading: 'Recordings',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-        buttonOne: 'Button One',
-        buttonTwo: 'Button Two'
+        body: 'Miss my voice 📱? Get your very own husband voice recordings 🎤 right here! 😍',
+        link: 'voice',
     },
     {
         icon: <FingerprintOutlinedIcon/>,
         heading: 'Poems',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-        buttonOne: 'Button One',
-        buttonTwo: 'Button Two'
+        body: 'Journey through your hearts 💝 desires, where art thou Genevieve, my beloved, cometh here and witness our written devotion 💌',
+        link: 'poems',
     },
     {
         icon: <InsertEmoticonOutlinedIcon/>,
         heading: 'Movies',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-        buttonOne: 'Button One',
-        buttonTwo: 'Button Two'
+        body: 'Did someone 🙇 say movie date 💚 night? 🎥',
+        link: 'movies',
     },
 ]
 
-function Genevieve() {
+function Genevieve(props) {
     const { user } = useAuth();
     const classes = useStyles();
+    const {match, history, location} = props;
 
     return (
         <>
@@ -143,7 +139,7 @@ function Genevieve() {
             {
                 cards.map(card => (
                     <Grid key={`${card.heading}_card`} item xs={12} sm={6} md={3} lg={2}>
-                        <Card className={classes.cards}>
+                        <Card className={classes.cards} onClick={() => history.push(`${match.url}/${card.link}`, [location.state])}>
                             <CardActionArea>
                                 {card.icon}
                                 <CardContent>

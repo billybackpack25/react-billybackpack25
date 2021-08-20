@@ -1,34 +1,33 @@
+import { useEffect, useState } from "react";
+import { Link, useLocation, useHistory } from "react-router-dom";
+import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer/SwipeableTemporaryDrawer";
+import SideNavOptions from './SideNavOptions/SideNavOptions'
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import { Link, useLocation, useHistory } from "react-router-dom";
-
 import Typography from "@material-ui/core/Typography";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Button from "@material-ui/core/Button";
 import Fade from '@material-ui/core/Fade';
-import { useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import useStyles from './styles';
 import ReactTypingEffect from 'react-typing-effect';
 import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
+import { useTheme } from '@material-ui/core/styles';
 
+import useStyles from './styles';
 import { useAuth } from "../../Context/AuthContext";
 import { useSite } from "../../Context/SiteContext";
-import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer/SwipeableTemporaryDrawer";
-
-import SideNavOptions from './SideNavOptions/SideNavOptions'
-import { useEffect, useState } from "react";
 
 
 const topNavOptions = [
     {
         component:Link,
-        to:`${process.env.PUBLIC_URL}/`,
+        to:`/`,
         label:'Home'
     },
     {
         component:Link,
-        to:`${process.env.PUBLIC_URL}/genevieve`,
+        to:`/genevieve`,
         label:'Genevieve',
         // Permission to see the button in the side nav
         permissions_needed: 'genevieve' 
@@ -50,24 +49,28 @@ const userGetsThePage = (link, permissions) => {
     return false;
 }
 
-
 const Header = () => {
-    const { user, AvatarImage, permissions, signout } = useAuth();
-    const classes = useStyles();
+    const { user, AvatarImage, permissions, signout } = useAuth(); // Authentication
+    const classes = useStyles(); // Styling
+    const site = useSite(); // Site variables
+    const theme = useTheme(); // Get theme hook to use for queries
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // If mobile screen, hide elements
 
     // Set scroll nav colour - START
     const [scrollStyle, setScrollStyle] = useState({});
 
     useEffect(() => {
+        // Adding listener to page scroll
         window.addEventListener('scroll', listen);
         
         return () => {
+            // Cleaning up scroll listener
             window.removeEventListener('scroll', listen)
         }
     }, [])
 
     const listen = () => {
-        if (window.scrollY > 400) {
+        if (window.scrollY > 350) {
             setScrollStyle({
                 transition: 'background-color 2s ease-in-out',
                 backgroundColor: 'rgba(95,52,27,1)',
@@ -81,13 +84,10 @@ const Header = () => {
     }
     // Set scroll nav colour - END
 
-
-
-
-
     // If there needs to be a condition for nav items to fade
     const fade = true;
 
+    // Let the user sign out - START
     let history = useHistory();
     let location = useLocation(); 
     const handleSignOut = (e) => {
@@ -97,12 +97,10 @@ const Header = () => {
             history.replace(from);
         });
     }
+    // Let the user sign out - END 
 
-    const site = useSite();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     return(
-    <AppBar color='transparent' style={scrollStyle} position='fixed' className={classes.appBar}>
+    <AppBar style={scrollStyle} color='transparent' position='fixed' className={classes.appBar}>
         <Toolbar>
             <Fade in={fade} timeout={1500}>
                 <>
