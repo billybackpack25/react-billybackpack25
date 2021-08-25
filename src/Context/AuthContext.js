@@ -45,7 +45,7 @@ export function useAuth() {
 function useProvideAuth() {
     // userApi['bilal']
     // userApi['gigi']
-    const [user, setUser] = useState(userApi['bilal']);
+    const [user, setUser] = useState(userApi['gigi']);
   
     const signin = cb => {
       return fakeAuth.signin(() => {

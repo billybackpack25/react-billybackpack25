@@ -5,10 +5,15 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
 import { Link } from '@material-ui/core';
 import SimpleDialogDemo from '../Modal/Modal';
 import { useSite } from '../../Context/SiteContext';
+
+import './style.css';
+
+import MessageBox from '../MessageBox/MessageBox';
 
 // const baseFile = '/genevievehasson_myub4q3hna'
 // function getMessages(year, month, data) {
@@ -77,6 +82,15 @@ const useStyles = makeStyles((theme) => ({
     //width: 600,
     backgroundColor: theme.palette.background.paper,
   },
+  msgRoot: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(1),
+      width: theme.spacing(16),
+      height: theme.spacing(16),
+    },
+  },
 }));
 
 const monthNAmes = {
@@ -113,9 +127,29 @@ export default function ScrollableTabsButtonAuto({data, year}) {
       allMessages = ['']
     }
       return allMessages.map((item) => {
-        const {sender_name, content, photos, timestamp_ms, ...everything} = item;
+        // const {sender_name, timestamp_ms, ...everything} = item;
+        const {sender_name, photos, content, timestamp_ms, ...everything} = item;
+        // let Image;
+        // let containerClass;
+        // let time;
+        // if (sender_name.toLowerCase().includes('bilal')) {
+        //   Image = <img src={bilalAvatar} alt="Avatar"/>;
+        //   containerClass = 'container';
+        //   time = <span className="time-right">{new Date(timestamp_ms).toUTCString()}</span>
+        // } else {
+        //   Image = <img src={gigiAvatar} alt="Avatar" className="right"/>;
+        //   containerClass = 'container darker';
+        //   time = <span className="time-left">{new Date(timestamp_ms).toUTCString()}</span>
+        // }
+
         return (
           <React.Fragment key={`${timestamp_ms}_${Math.random()}`}>
+            {/* <div className={containerClass}>
+            {Image}
+            <Typography variant='body2'>{JSON.stringify(everything)}</Typography>
+            {time}
+            </div> */}
+
             <Typography key={`${timestamp_ms}_message`} variant='body2' color={photos && 'primary'}>Sender: {sender_name} - <strong>{content}</strong> {JSON.stringify(everything)}</Typography>
             {photos && <Link href={photos} target="_blank" color="primary" variant="body2">Link</Link>}
             {photos && <SimpleDialogDemo imageSrc={photos}/>}
@@ -158,13 +192,19 @@ export default function ScrollableTabsButtonAuto({data, year}) {
             try {
             return (
                 <TabPanel key={`horiz_content_${item}`} value={value} index={index}>
+                   {
+                     index === 0 ? (
+                       <MessageBox/>
+                     ) : null
+                   }
+                   <br/>
                     {                                       
                         Object.values(data[item]).reverse().map(day => (
                             <Link key={Math.random()} onClick={() => setMessageDay(day)}>{day} </Link>
                         ))
                     }
                     <br/>
-                    {messages ? returnMessages() : 'loading...'}
+                    {messages ? returnMessages() : <CircularProgress color="secondary" />}
                 </TabPanel>
             )
             } catch (err) {

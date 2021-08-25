@@ -23,9 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # Genevieve Static
-public/genevieve/audio/**
-public/genevieve/photos/**
-public/genevieve/videos/**
+/public/genevieve/audio/**
+/public/genevieve/photos/**
+/public/genevieve/videos/**
 /src/assets/genevieve/*.json
 /src/assets/genevieve/genevieve.tar.gz
 
